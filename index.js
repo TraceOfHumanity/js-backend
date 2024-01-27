@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
 import UserSchema from "./models/user.js";
+import checkAuth from "./utils/checkAuth.js";
 import { registerValidation } from "./validations/auth.js";
 
 const app = express();
@@ -98,6 +99,14 @@ app.post("/auth/login", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+app.get("/auth/meInfo", checkAuth, async (req, res) => {
+  try {
+    res.json({
+      success: true,
+    });
+  } catch (error) {}
 });
 
 app.listen(process.env.SERVER_PORT, (err) => {
