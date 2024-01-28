@@ -2,9 +2,15 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 
+import {
+  createPost,
+  getAllPosts,
+  getPostById,
+} from "./controllers/postController.js";
 import { login, meInfo, register } from "./controllers/userController.js";
 import checkAuth from "./utils/checkAuth.js";
-import { registerValidation } from "./validations/auth.js";
+import { loginValidation, registerValidation } from "./validations/auth.js";
+import { postCreateValidation } from "./validations/post.js";
 
 const app = express();
 dotenv.config();
@@ -24,10 +30,14 @@ app.get("/", (req, res) => {
 });
 
 app.post("/auth/register", registerValidation, register);
-
-app.post("/auth/login", login);
-
+app.post("/auth/login", loginValidation, login);
 app.get("/auth/meInfo", checkAuth, meInfo);
+
+app.get("/posts", getAllPosts);
+app.get("/posts/:id", getPostById);
+app.post("/posts", checkAuth, postCreateValidation, createPost);
+// app.patch("/posts/:id", checkAuth, updatePost);
+// app.delete("/posts/:id", checkAuth, deletePost);
 
 app.listen(process.env.SERVER_PORT, (err) => {
   if (err) {

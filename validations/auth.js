@@ -11,3 +11,11 @@ export const registerValidation = [
     .optional()
     .isURL(),
 ];
+
+export const loginValidation = [
+  body("email", "Please enter a valid email address").isEmail(),
+  body(
+    "password",
+    "Please enter a password with at least 8 characters"
+  ).isLength({ min: 8 }),
+];
